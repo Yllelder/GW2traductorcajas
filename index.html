@@ -1,177 +1,177 @@
 <html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>GW2 wiki - Traducción de cajas al español</title>
-	<style>
-		body { background-color: #F0F0F0; }
-		textarea {
-			width: 800px;
-			height: 600px;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <title>GW2 wiki - Traducción de cajas al español</title>
+    <style>
+        body { background-color: #F0F0F0; }
+        textarea {
+            width: 800px;
+            height: 600px;
+        }
+    </style>
 </head>
 <body>
-	<textarea id="cajaIngles" spellcheck="false" placeholder="Pegar la caja en inglés aquí"></textarea>
-	<textarea id="cajaEspanol" spellcheck="false"></textarea><img id="iconoObjeto" src="">
-	<input type="button" value="Traducir caja" onclick="traducirCaja()">
+    <textarea id="cajaIngles" spellcheck="false" placeholder="Pegar la caja en inglés aquí"></textarea>
+    <textarea id="cajaEspanol" spellcheck="false"></textarea><img id="iconoObjeto" src="">
+    <input type="button" value="Traducir caja" onclick="traducirCaja()">
 
-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
-	<script>
-		function traducirCaja() {
-			var textoIngles = document.getElementById("cajaIngles").value;
-			var primeraPalabra = textoIngles.split(" ")[0];
+    <script>
+        function traducirCaja() {
+            var textoIngles = document.getElementById("cajaIngles").value;
+            var primeraPalabra = textoIngles.split(" ")[0];
 
-			/* === Weapon infobox - Arma caja === */
-			if (primeraPalabra == "{{Weapon" || primeraPalabra == "{{weapon") {
+            /* === Weapon infobox - Arma caja === */
+            if (primeraPalabra == "{{Weapon" || primeraPalabra == "{{weapon") {
 
-				expRegBuscarID = /(?<=\| id = )\d*/;
-				idDeObjeto = textoIngles.match(expRegBuscarID);
-				
-				$.ajax({
-					url: "https://api.guildwars2.com/v2/items/" + idDeObjeto + "?lang=es",
-					async: false,
-					dataType: 'json',
-					success: function(resultado) {
-						jsonDeObjeto = resultado;
-					}
-				});
-    			$.ajax({
-					url: "https://api.guildwars2.com/v2/skins/" + jsonDeObjeto.default_skin + "?lang=es",
-					async: false,
-					dataType: 'json',
-					success: function(resultado) {
-						jsonDeSkin = resultado;
-					}
-				});
+                expRegBuscarID = /(?<=\| id = )\d*/;
+                idDeObjeto = textoIngles.match(expRegBuscarID);
+                
+                $.ajax({
+                    url: "https://api.guildwars2.com/v2/items/" + idDeObjeto + "?lang=es",
+                    async: false,
+                    dataType: 'json',
+                    success: function(resultado) {
+                        jsonDeObjeto = resultado;
+                    }
+                });
+                $.ajax({
+                    url: "https://api.guildwars2.com/v2/skins/" + jsonDeObjeto.default_skin + "?lang=es",
+                    async: false,
+                    dataType: 'json',
+                    success: function(resultado) {
+                        jsonDeSkin = resultado;
+                    }
+                });
 
-				var textoTraducido = textoIngles
-				.replace(/{{Weapon infobox/gi, "{{Arma caja")
-				.replace(/\| bound =/gi, "| vinculado =")
-				.replace(/\| collection =/gi, "| colección =")
-				.replace(/\| cost =/gi, "| coste =")
-				.replace(/\| defense =/gi, "| defensa =")
-				.replace(/\| description =/gi, "| descripción =")
-				.replace(/\| gallery1 =.*/gi, "| galería1 = " + jsonDeSkin.name + ".jpg")
-				.replace(/\| gallery1-text =/gi, "| galería1-texto =")
-				.replace(/\| gallery2 =/gi, "| galería2 =")
-				.replace(/\| gallery2-text =/gi, "| galería2-texto =")
-				.replace(/\| gallery3 =/gi, "| galería3 =")
-				.replace(/\| gallery3-text =/gi, "| galería3-texto =")
-				.replace(/\| gallery4 =/gi, "| galería4 =")
-				.replace(/\| gallery4-text =/gi, "| galería4-texto =")
-				.replace(/\| gallery5 =/gi, "| galería5 =")
-				.replace(/\| gallery5-text =/gi, "| galería5-texto =")
-				.replace(/\| icon =.*/gi, "| icono = " + jsonDeSkin.name + ".png")
-				.replace(/\| level =/gi, "| nivel =")
-				.replace(/\| maximum power =/gi, "| potencia máxima =")
-				.replace(/\| minimum power =/gi, "| potencia mínima =")
-				.replace(/\| name =/gi, "| nombre =")
-				.replace(/\| prefix =/gi, "| prefijo =")
-				.replace(/\| rarity =/gi, "| rareza =")
-				.replace(/\| requires =/gi, "| requiere =")
-				.replace(/\| set =/gi, "| conjunto =")
-				.replace(/\| skin =.*/gi, "| diseño = " + jsonDeSkin.name)
-				.replace(/\| stat level =/gi, "| nivel estadísticas =")
-				.replace(/\| status =/gi, "| estatus =")
-				.replace(/\| status notes =/gi, "| notas status =")
-				.replace(/\| type = Axe/gi, "| tipo = Hacha")
-				.replace(/\| type = Dagger/gi, "| tipo = Daga")
-				.replace(/\| type = Focus/gi, "| tipo = Foco")
-				.replace(/\| type = Greatsword/gi, "| tipo = Mandoble")
-				.replace(/\| type = Hammer/gi, "| tipo = Martillo")
-				.replace(/\| type = Harpoon gun/gi, "| tipo = Cañón de arpón")
-				.replace(/\| type = Longbow/gi, "| tipo = Arco largo")
-				.replace(/\| type = Mace/gi, "| tipo = Maza")
-				.replace(/\| type = Pistol/gi, "| tipo = Pistola")
-				.replace(/\| type = Rifle/gi, "| tipo = Rifle")
-				.replace(/\| type = Scepter/gi, "| tipo = Cetro")
-				.replace(/\| type = Shield/gi, "| tipo = Escudo")
-				.replace(/\| type = Short bow/gi, "| tipo = Arco corto")
-				.replace(/\| type = Spear/gi, "| tipo = Lanza")
-				.replace(/\| type = Staff/gi, "| tipo = Báculo")
-				.replace(/\| type = Sword/gi, "| tipo = Espada")
-				.replace(/\| type = Torch/gi, "| tipo = Antorcha")
-				.replace(/\| type = Trident/gi, "| tipo = Tridente")
-				.replace(/\| type = Warhorn/gi, "| tipo = Cuerno de guerra")
-				.replace(/\| unique =/gi, "| único =")			
-				.replace(/\| value =/gi, "| valor =");
-				if (jsonDeObjeto.details.suffix_item_id) {
-					$.ajax({
-					url: "https://api.guildwars2.com/v2/items/" + jsonDeObjeto.details.suffix_item_id + "?lang=es",
-					async: false,
-					dataType: 'json',
-					success: function(resultado) {
-						jsonDeMejora = resultado;
-					}
-				});
-					var textoTraducido = textoTraducido.replace(/\| uslot =.*/gi, "| mranura = " + jsonDeMejora.name)
-				}
+                var textoTraducido = textoIngles
+                .replace(/{{Weapon infobox/gi, "{{Arma caja")
+                .replace(/\| bound =/gi, "| vinculado =")
+                .replace(/\| collection =/gi, "| colección =")
+                .replace(/\| cost =/gi, "| coste =")
+                .replace(/\| defense =/gi, "| defensa =")
+                .replace(/\| description =/gi, "| descripción =")
+                .replace(/\| gallery1 =.*/gi, "| galería1 = " + jsonDeSkin.name + ".jpg")
+                .replace(/\| gallery1-text =/gi, "| galería1-texto =")
+                .replace(/\| gallery2 =/gi, "| galería2 =")
+                .replace(/\| gallery2-text =/gi, "| galería2-texto =")
+                .replace(/\| gallery3 =/gi, "| galería3 =")
+                .replace(/\| gallery3-text =/gi, "| galería3-texto =")
+                .replace(/\| gallery4 =/gi, "| galería4 =")
+                .replace(/\| gallery4-text =/gi, "| galería4-texto =")
+                .replace(/\| gallery5 =/gi, "| galería5 =")
+                .replace(/\| gallery5-text =/gi, "| galería5-texto =")
+                .replace(/\| icon =.*/gi, "| icono = " + jsonDeSkin.name + ".png")
+                .replace(/\| level =/gi, "| nivel =")
+                .replace(/\| maximum power =/gi, "| potencia máxima =")
+                .replace(/\| minimum power =/gi, "| potencia mínima =")
+                .replace(/\| name =/gi, "| nombre =")
+                .replace(/\| prefix =/gi, "| prefijo =")
+                .replace(/\| rarity =/gi, "| rareza =")
+                .replace(/\| requires =/gi, "| requiere =")
+                .replace(/\| set =/gi, "| conjunto =")
+                .replace(/\| skin =.*/gi, "| diseño = " + jsonDeSkin.name)
+                .replace(/\| stat level =/gi, "| nivel estadísticas =")
+                .replace(/\| status =/gi, "| estatus =")
+                .replace(/\| status notes =/gi, "| notas status =")
+                .replace(/\| type = Axe/gi, "| tipo = Hacha")
+                .replace(/\| type = Dagger/gi, "| tipo = Daga")
+                .replace(/\| type = Focus/gi, "| tipo = Foco")
+                .replace(/\| type = Greatsword/gi, "| tipo = Mandoble")
+                .replace(/\| type = Hammer/gi, "| tipo = Martillo")
+                .replace(/\| type = Harpoon gun/gi, "| tipo = Cañón de arpón")
+                .replace(/\| type = Longbow/gi, "| tipo = Arco largo")
+                .replace(/\| type = Mace/gi, "| tipo = Maza")
+                .replace(/\| type = Pistol/gi, "| tipo = Pistola")
+                .replace(/\| type = Rifle/gi, "| tipo = Rifle")
+                .replace(/\| type = Scepter/gi, "| tipo = Cetro")
+                .replace(/\| type = Shield/gi, "| tipo = Escudo")
+                .replace(/\| type = Short bow/gi, "| tipo = Arco corto")
+                .replace(/\| type = Spear/gi, "| tipo = Lanza")
+                .replace(/\| type = Staff/gi, "| tipo = Báculo")
+                .replace(/\| type = Sword/gi, "| tipo = Espada")
+                .replace(/\| type = Torch/gi, "| tipo = Antorcha")
+                .replace(/\| type = Trident/gi, "| tipo = Tridente")
+                .replace(/\| type = Warhorn/gi, "| tipo = Cuerno de guerra")
+                .replace(/\| unique =/gi, "| único =")          
+                .replace(/\| value =/gi, "| valor =");
+                if (jsonDeObjeto.details.suffix_item_id) {
+                    $.ajax({
+                    url: "https://api.guildwars2.com/v2/items/" + jsonDeObjeto.details.suffix_item_id + "?lang=es",
+                    async: false,
+                    dataType: 'json',
+                    success: function(resultado) {
+                        jsonDeMejora = resultado;
+                    }
+                });
+                    var textoTraducido = textoTraducido.replace(/\| uslot =.*/gi, "| mranura = " + jsonDeMejora.name)
+                }
 
-			/* === Armor infobox - Armadura caja === */
-			} else if (primeraPalabra == "{{Armor" || primeraPalabra == "{{armor") {
-				var textoTraducido = textoIngles
-				.replace(/{{Armor infobox/gi, "{{Armadura caja")
-				.replace(/\| bound =/gi, "| vinculado =")
-				.replace(/\| categorize =/gi, "| categorizar =")
-				.replace(/\| class = Heavy/gi, "| clase = pesada")
-				.replace(/\| class = Medium/gi, "| clase = media")
-				.replace(/\| class = Light/gi, "| clase = ligera")
-				.replace(/\| collection =/gi, "| colección =")
-				.replace(/\| cost =/gi, "| coste =")
-				.replace(/\| defense =/gi, "| defensa =")
-				.replace(/\| description =/gi, "| descripción =")
-				.replace(/\| gallery1 =/gi, "| galería1 =")
-				.replace(/\| gallery1-text =/gi, "| galería1-texto =")
-				.replace(/\| gallery2 =/gi, "| galería2 =")
-				.replace(/\| gallery2-text =/gi, "| galería2-texto =")
-				.replace(/\| gallery3 =/gi, "| galería3 =")
-				.replace(/\| gallery3-text =/gi, "| galería3-texto =")
-				.replace(/\| gallery4 =/gi, "| galería4 =")
-				.replace(/\| gallery4-text =/gi, "| galería4-texto =")
-				.replace(/\| gallery5 =/gi, "| galería5 =")
-				.replace(/\| gallery5-text =/gi, "| galería5-texto =")
-				.replace(/\| icon =/gi, "| icono =")
-				.replace(/\| infusion slot =/gi, "| ranura de infusión =")
-				.replace(/\| level =/gi, "| nivel =")
-				.replace(/\| name =/gi, "| nombre =")
-				.replace(/\| prefix =/gi, "| prefijo =")
-				.replace(/\| race =/gi, "| raza =")
-				.replace(/\| rarity =/gi, "| rareza =")
-				.replace(/\| requires =/gi, "| requiere =")
-				.replace(/\| set =/gi, "| conjunto =")
-				.replace(/\| skin =/gi, "| diseño =")
-				.replace(/\| skin id =/gi, "| diseño id =")
-				.replace(/\| stat level =/gi, "| nivel estadísticas =")
-				.replace(/\| status =/gi, "| estatus =")
-				.replace(/\| status notes =/gi, "| notas status =")
-				.replace(/\| type =/gi, "| tipo =")
-				.replace(/\| unique =/gi, "| único =")
-				.replace(/\| uslot =/gi, "| mranura =")
-				.replace(/\| value =/gi, "| valor =");
-			}
-			var textoTraducido = textoTraducido
-			/* === Traducir rarezas === */
-			.replace(/\| rareza = Junk/gi, "| rareza = Basura")
-			.replace(/\| rareza = Basic/gi, "| rareza = Básico")
-			.replace(/\| rareza = Fine/gi, "| rareza = Selecto")
-			.replace(/\| rareza = Masterwork/gi, "| rareza = Obra de arte")
-			.replace(/\| rareza = Rare/gi, "| rareza = Excepcional")
-			.replace(/\| rareza = Exotic/gi, "| rareza = Exótico")
-			.replace(/\| rareza = Ascended/gi, "| rareza = Ascendido")
-			.replace(/\| rareza = Legendary/gi, "| rareza = Legendario")
+            /* === Armor infobox - Armadura caja === */
+            } else if (primeraPalabra == "{{Armor" || primeraPalabra == "{{armor") {
+                var textoTraducido = textoIngles
+                .replace(/{{Armor infobox/gi, "{{Armadura caja")
+                .replace(/\| bound =/gi, "| vinculado =")
+                .replace(/\| categorize =/gi, "| categorizar =")
+                .replace(/\| class = Heavy/gi, "| clase = pesada")
+                .replace(/\| class = Medium/gi, "| clase = media")
+                .replace(/\| class = Light/gi, "| clase = ligera")
+                .replace(/\| collection =/gi, "| colección =")
+                .replace(/\| cost =/gi, "| coste =")
+                .replace(/\| defense =/gi, "| defensa =")
+                .replace(/\| description =/gi, "| descripción =")
+                .replace(/\| gallery1 =/gi, "| galería1 =")
+                .replace(/\| gallery1-text =/gi, "| galería1-texto =")
+                .replace(/\| gallery2 =/gi, "| galería2 =")
+                .replace(/\| gallery2-text =/gi, "| galería2-texto =")
+                .replace(/\| gallery3 =/gi, "| galería3 =")
+                .replace(/\| gallery3-text =/gi, "| galería3-texto =")
+                .replace(/\| gallery4 =/gi, "| galería4 =")
+                .replace(/\| gallery4-text =/gi, "| galería4-texto =")
+                .replace(/\| gallery5 =/gi, "| galería5 =")
+                .replace(/\| gallery5-text =/gi, "| galería5-texto =")
+                .replace(/\| icon =/gi, "| icono =")
+                .replace(/\| infusion slot =/gi, "| ranura de infusión =")
+                .replace(/\| level =/gi, "| nivel =")
+                .replace(/\| name =/gi, "| nombre =")
+                .replace(/\| prefix =/gi, "| prefijo =")
+                .replace(/\| race =/gi, "| raza =")
+                .replace(/\| rarity =/gi, "| rareza =")
+                .replace(/\| requires =/gi, "| requiere =")
+                .replace(/\| set =/gi, "| conjunto =")
+                .replace(/\| skin =/gi, "| diseño =")
+                .replace(/\| skin id =/gi, "| diseño id =")
+                .replace(/\| stat level =/gi, "| nivel estadísticas =")
+                .replace(/\| status =/gi, "| estatus =")
+                .replace(/\| status notes =/gi, "| notas status =")
+                .replace(/\| type =/gi, "| tipo =")
+                .replace(/\| unique =/gi, "| único =")
+                .replace(/\| uslot =/gi, "| mranura =")
+                .replace(/\| value =/gi, "| valor =");
+            }
+            var textoTraducido = textoTraducido
+            /* === Traducir rarezas === */
+            .replace(/\| rareza = Junk/gi, "| rareza = Basura")
+            .replace(/\| rareza = Basic/gi, "| rareza = Básico")
+            .replace(/\| rareza = Fine/gi, "| rareza = Selecto")
+            .replace(/\| rareza = Masterwork/gi, "| rareza = Obra de arte")
+            .replace(/\| rareza = Rare/gi, "| rareza = Excepcional")
+            .replace(/\| rareza = Exotic/gi, "| rareza = Exótico")
+            .replace(/\| rareza = Ascended/gi, "| rareza = Ascendido")
+            .replace(/\| rareza = Legendary/gi, "| rareza = Legendario")
 
-			/* === Traducir vinculados === */
-			.replace(/\| vinculado = acquire/gi, "| vinculado = adquisición")
-			.replace(/\| vinculado = use/gi, "| vinculado = uso")
-			.replace(/\| vinculado = account/gi, "| vinculado = cuenta")
-			.replace(/\| vinculado = account soul/gi, "| vinculado = vinculado uso")
-			.replace(/\| vinculado = account use/gi, "| vinculado = vinculado ligado");
-			
-			document.getElementById("cajaEspanol").value=textoTraducido; //Mostrar texto traducido en caja español
-			document.getElementById('iconoObjeto').src = jsonDeObjeto.icon;
-		}
-	</script>
+            /* === Traducir vinculados === */
+            .replace(/\| vinculado = acquire/gi, "| vinculado = adquisición")
+            .replace(/\| vinculado = use/gi, "| vinculado = uso")
+            .replace(/\| vinculado = account/gi, "| vinculado = cuenta")
+            .replace(/\| vinculado = account soul/gi, "| vinculado = vinculado uso")
+            .replace(/\| vinculado = account use/gi, "| vinculado = vinculado ligado");
+            
+            document.getElementById("cajaEspanol").value=textoTraducido; //Mostrar texto traducido en caja español
+            document.getElementById('iconoObjeto').src = jsonDeObjeto.icon;
+        }
+    </script>
 </body>
 </html>
